@@ -1,0 +1,23 @@
+.flexbox {
+    justify-content: space-between;
+}
+
+.flexbox::before, .flexbox::after {
+  content: ''; /* Insert space to make justify-content behave like center with different overflow-semantics */
+}
+
+div.panel {
+	margin-bottom: 0px;
+}
+
+#btnCancel {
+	margin-right: 1em;
+}
+
+#lblReason {
+	color: red;
+}
+
+#fgButtons {
+	margin-bottom: 0px;
+}
