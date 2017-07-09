@@ -8,6 +8,7 @@
 */
 
 const String MIMETYPE_JSON = "application/json";
+const long STA_CONNECTION_TIMEOUT = 10*1000;
 
 String hostName;
 
@@ -64,7 +65,8 @@ void setupAsSTA() {
   
   // Wait for connection, blink LED while doing so.
   int led = LOW;
-  while (WiFi.status() != WL_CONNECTED) {
+  long until = millis() + STA_CONNECTION_TIMEOUT;
+  while ((WiFi.status() != WL_CONNECTED) && (millis() <= until)) {
     digitalWrite(LED_PIN_ESP, led);
     if (led == HIGH) {
       led = LOW;
@@ -76,9 +78,13 @@ void setupAsSTA() {
     Serial.printf(".");
   }
   Serial.printf("\n");
-  
-  Serial.printf("Connected to network \"%s\". IP address: %s\n", ssid.c_str(), WiFi.localIP().toString().c_str());
 
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.printf("Connected to network \"%s\". IP address: %s\n", ssid.c_str(), WiFi.localIP().toString().c_str());
+  } else {
+    Serial.printf("Connection to network \"%s\" timed out.\n", ssid.c_str());
+  } 
+  
   digitalWrite(LED_PIN_ESP, HIGH);
 }
 
@@ -200,11 +206,7 @@ void sendJSON(String body, int statuscode=200) {
 void handleRoot() {
   logRequest();
 
-  if (WiFiMode == "WIFI_AP") {
-    server.sendHeader("Location", "/setup.html");
-  } else {
-    server.sendHeader("Location", "/index.html");
-  }
+  server.sendHeader("Location", "/index.html");
   server.send(302, "text/plain", "302 Found");
   
   Serial.printf("sent redirect.\n");        

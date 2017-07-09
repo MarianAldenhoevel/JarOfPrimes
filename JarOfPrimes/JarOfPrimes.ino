@@ -19,7 +19,7 @@
  *
  * The (red) LED on the NodeMCU board blinks when the Jar is ready
  * and working.
- * 
+ * s
  * Marian Aldenhövel <marian.aldenhoevel@marian-aldenhoevel.de>
  * Published under the MIT license. See license.html or 
  * https://opensource.org/licenses/MIT
